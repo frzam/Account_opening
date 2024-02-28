@@ -89,48 +89,70 @@ document.addEventListener('DOMContentLoaded', function () {
   
   let currentUser = null;
 
-require('dotenv').config(); 
+// URL of the node application
+const apiUrl = 'http://localhost:3000';
 
+// This function is called on login().
 function login() {
-  const usernameInput = document.getElementById('username').value;
-  const passwordInput = document.getElementById('password').value;
+  //with form submission
+  var path = '/login'
 
-  // Check if entered credentials match any user
-  const csrUsername = process.env.CSR_USERNAME;
-  const csrPassword = process.env.CSR_PASSWORD;
-  const branchManagerUsername = process.env.BRANCH_MANAGER_USERNAME;
-  const branchManagerPassword = process.env.BRANCH_MANAGER_PASSWORD;
+  var loginData = {
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value
+      };
+      // Send req localhost:3306/login
+      fetch(apiUrl+path, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
 
-  let currentUser = null;
-
-  if (
-    (usernameInput === csrUsername && passwordInput === csrPassword) ||
-    (usernameInput === branchManagerUsername && passwordInput === branchManagerPassword)
-  ) {
-    // Set the current user based on the entered credentials
-    currentUser = {
-      username: usernameInput,
-      role: usernameInput === csrUsername ? 'csr' : 'branchmanager',
-    };
-
-    // Successful login
-    alert(`Login successful. Welcome, ${currentUser.username}!`);
-
-    // Hide the login form
-    document.getElementById('loginForm').style.display = 'none';
-
-    // Show the appropriate UI based on the user role
-    if (currentUser.role === 'csr') {
-      document.getElementById('csrDashboard').style.display = 'block';
-    } else if (currentUser.role === 'branchmanager') {
-      document.getElementById('branchManagerUI').style.display = 'block';
-      loadApplications();
+        body: JSON.stringify(loginData),  
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.status);
+        if (data.status == 'Successful'){
+          alert('Login successful. Welcome!');
+        }else{
+          alert('Login Failed.');
+        }})
+      .catch((error) => {
+        console.error('Error submitting application:', error);
+        alert('Error submitting application. Please try again.');
+      });
     }
-  } else {
-    // Failed login
-    alert('Invalid username or password. Please try again.');
-  }
-}
+  // let currentUser = null;
+  // console.log('csrUsername: ', csrUsername)
+  // if (
+  //   (usernameInput === csrUsername && passwordInput === csrPassword) ||
+  //   (usernameInput === branchManagerUsername && passwordInput === branchManagerPassword)
+  // ) {
+  //   // Set the current user based on the entered credentials
+  //   currentUser = {
+  //     username: usernameInput,
+  //     role: usernameInput === csrUsername ? 'csr' : 'branchmanager',
+  //   };
+
+  //   // Successful login
+  //   alert(`Login successful. Welcome, ${currentUser.username}!`);
+
+  //   // Hide the login form
+  //   document.getElementById('loginForm').style.display = 'none';
+
+  //   // Show the appropriate UI based on the user role
+  //   if (currentUser.role === 'csr') {
+  //     document.getElementById('csrDashboard').style.display = 'block';
+  //   } else if (currentUser.role === 'branchmanager') {
+  //     document.getElementById('branchManagerUI').style.display = 'block';
+  //     loadApplications();
+  //   }
+  // } else {
+  //   // Failed login
+  //   alert('Invalid username or password. Please try again.');
+  // }
+
 
 
 function openNewAccount() {

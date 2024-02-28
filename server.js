@@ -2,6 +2,8 @@ const express = require('express');
 const mysql = require('mysql');
 const dotenv = require('dotenv');
 
+
+
 dotenv.config();
 
 const dbConfig = {
@@ -34,6 +36,39 @@ process.on('SIGINT', () => {
 const app = express();
 
 app.use(express.json());
+
+// Supress CORS Error
+const cors=require("cors");
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            
+   optionSuccessStatus:200,
+}
+app.use(cors(corsOptions)) // Use this after the variable declaration
+
+// /login endpoint
+app.post('/login',(req,res)=>{
+  var username = req.body.username
+  var password = req.body.password
+  console.log(username, 'is trying to login!')
+  data = {
+    status : 'Failed'
+  }
+  q = 'Select * from '+ dbConfig.database + '.user_auth where username = ' + mysql.escape(username) + 'and password = ' + mysql.escape(password);
+  connection.query(q, (err, result) =>{
+    if(err){
+      console.log('Error during Auth query: ', err)
+      return
+    }
+  if (result && result.length == 1){
+    data.status = "Successful"
+    console.log(username, 'is logged in successfully')
+  }
+  console.log('data: ', data)
+  res.send(data)
+  return
+  })
+});
 
 app.post('/submit-application', (req, res) => {
   const formData = req.body;
