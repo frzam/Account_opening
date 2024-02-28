@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
   
   let currentUser = null;
-// app.js (or your main application file)
+
 require('dotenv').config(); 
 
 function login() {
