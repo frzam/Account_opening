@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Validate ID Number
     const isIdNumberValid = /^[a-zA-Z0-9]{12}$/.test(formData.idNumber);
     if (!isIdNumberValid) {
-      validationErrors.idNumber = 'Please enter a valid Aadhaar or Passport number (exactly 12 characters with at most two letters).';
+      validationErrors.idNumber = 'Please enter a valid Aadhaar or Passport number .';
     }
   
     // Validate Mobile Number
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
   
-    // Continue with form submission
+    //with form submission
     fetch('/submit-application', {
       method: 'POST',
       headers: {
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
   let currentUser = null;
 // app.js (or your main application file)
-require('dotenv').config(); // Make sure to include this line at the top
+require('dotenv').config(); 
 
 function login() {
   const usernameInput = document.getElementById('username').value;
